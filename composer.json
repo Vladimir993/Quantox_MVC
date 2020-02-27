@@ -1,0 +1,20 @@
+{
+    "name": "vladimir/quantox_mvc",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Vladimir993",
+            "email": "petrovicphp@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+
+   "autoload": {
+        "psr-4": {
+            "App\\Core\\": "app/core",
+	    "App\\Controllers\\": "app/controllers"
+        }
+    }     
+}
