@@ -27,4 +27,12 @@ class Controller
 		$this->view = $view;
 	}
 
+	protected function loadModel($model)
+	{
+		
+		$model = "App\Core\\$model";
+
+		$this->model = new $model;
+	}
+
 }

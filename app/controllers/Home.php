@@ -9,5 +9,7 @@ class Home extends Controller
 	public function index()
 	{
 		$this->render("home");
+		
+		$this->loadModel("Model");
 	}
 }
