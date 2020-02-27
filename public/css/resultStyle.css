@@ -1,0 +1,17 @@
+.leftSection{
+	background: #2F4F4F; 
+	color:white; 
+	float: left;
+	margin: 100px 300px;
+	padding: 30px;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.rightSection{
+	margin: 300px auto;float: 
+	left;margin: 100px 0px;
+	padding: 30px;
+	font-size: 2em;
+	font-style: italic;
+}
