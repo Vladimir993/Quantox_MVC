@@ -13,7 +13,7 @@ class Controller
 	 *
 	 * @return void.
 	**/ 
-	protected function render($view,$template = true)
+	protected function render($view, $data = [], $template = true)
 	{
 		if ($template) {
 
@@ -25,14 +25,28 @@ class Controller
 		require '../app/views/'. $view .'.php';
 
 		$this->view = $view;
+		$this->data = $data;
 	}
 
 	protected function loadModel($model)
 	{
 		
-		$model = "App\Core\\$model";
+		$model = "App\Models\\$model";
 
-		$this->model = new $model;
+		$this->model = new $model();
+	}
+
+	/**
+	 * Redirect user location.
+	 *
+	 * @param object $class
+	 * @param string $method
+	 * @return void
+	**/
+	function redirect($class,$method)
+	{
+		header("location:http://localhost/Quantox_MVC/public/" . 
+		(new \ReflectionClass($class))->getShortName() . DIRECTORY_SEPARATOR . $method);
 	}
 
 }

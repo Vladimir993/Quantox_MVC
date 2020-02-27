@@ -3,9 +3,9 @@
 	<form action="result.php" method="get">
 		<input type="search" name="search">
 		<select name="userType">
-			<option>a</option>
-			<option>b</option>
-			<option>c</option>
+					<?php foreach ($data['users_types'] as $key) {
+						echo "<option>". $key["name"] ."</option>";
+					}?>
 		</select>
 		<input type="submit" name="Search" value="Search">
 	</form>			

@@ -2,12 +2,13 @@
 
 namespace App\Core;
 
-class Model extends Database
+class Model extends ConnectionDb
 {
 	function __construct()
 	{
-		
 
-		echo "hello from model";
+		$this->getConnection();
 	}
+
+
 }

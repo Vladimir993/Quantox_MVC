@@ -2,24 +2,20 @@
 
 namespace App\Core;
 
-class Connection {
+class ConnectionDb {
 
     private static $instance = null;
-  	private $conn;
+  	protected $conn;
   
   	const HOST = 'localhost';
   	const USER = 'root';
 	  const PASS = '';
-   
-  	private function __construct()
-  	{
-  		  $this->conn = mysqli_connect(SELF::HOST, SELF::USER, SELF::PASS);
-  	}
-  	
-  	public static function getInstance()
+    const DB   = 'quantox';
+	
+  	private static function getInstance()
   	{
       	if(!self::$instance){
-        		self::$instance = new Connection();
+        		self::$instance = mysqli_connect(SELF::HOST, SELF::USER, SELF::PASS, SELF::DB );
       	}
    
     	  return self::$instance;
@@ -27,6 +23,7 @@ class Connection {
   
   	public function getConnection()
   	{
-    	return $this->conn;
+      self::getInstance();
+    	$this->conn = self::$instance;
   	}
 }

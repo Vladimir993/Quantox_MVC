@@ -10,4 +10,9 @@ class Login extends Controller
 	{
 		$this->render("login");
 	}
+
+	public function loginValidation()
+	{
+		$this->redirect(new Home,"index");
+	}
 }

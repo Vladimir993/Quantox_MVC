@@ -8,8 +8,11 @@ class Home extends Controller
 {
 	public function index()
 	{
-		$this->render("home");
+		$this->loadModel("User");
 		
-		$this->loadModel("Model");
+
+		$this->render("home",[
+			"users_types" => $this->model->getAllUsersTypes()
+		]);
 	}
 }
