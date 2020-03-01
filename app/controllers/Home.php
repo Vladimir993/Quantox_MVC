@@ -11,8 +11,7 @@ class Home extends Controller
 		$this->loadModel("User");
 		
 
-		$this->render("home",[
-			"users_types" => $this->model->getAllUsersTypes()
-		]);
+		$this->render("home");
+	
 	}
 }
