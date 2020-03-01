@@ -46,7 +46,7 @@ class Login extends Controller
 			}
 
 			Session::set("user",$dbUser['name']);
-			$this->redirect(new Home,"index");
+			$this->redirect(new Home,"loggedIn");
 				
 		}
 
