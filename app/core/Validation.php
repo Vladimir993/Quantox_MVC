@@ -4,7 +4,7 @@ namespace App\Core;
 
 class Validation
 {
-	
+
 	/**
 	 * Check fields.
 	 * 
@@ -31,23 +31,29 @@ class Validation
 
 	/**
 	 * Compare user login input data with data in database.
-	 * 
+	 * If user doesn't exist return empty array.	 
+	 * If user exist return array with user info.
+	 *
 	 * @param array $userInput
 	 * @param array $dbUsers
 	 *
-	 * @return assoc array
+	 * @return array.
 	**/
 	public static function loginCompare($userInput, $dbUsers)
 	{
+		$user = [];
+
 		for($i=0;$i<count($dbUsers);$i++){
 
 			if ($dbUsers[$i]["email"] == $userInput["email"] && 
 				$dbUsers[$i]["password"] == $userInput["password"]){
 
-					return $dbUsers[$i];
+					$user =  $dbUsers[$i];
+					break;
 			}
 					
 		}
+		return $user;
 	}
 
 	/**
