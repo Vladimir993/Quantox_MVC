@@ -1,4 +1,4 @@
-<div>
+<div id="leftSection">
 	<ul>
 		<ul>
 			<?php foreach ($data['languages'] as $lang): ?>
@@ -31,4 +31,10 @@
 			<?php endforeach ?>
 		</ul>
 	</ul>	
+</div>
+
+<div id="rightSection">
+	<?php foreach ($data['db_users'] as $key): ?>
+		<?= $key['email'] ?>
+	<?php endforeach ?>
 </div>

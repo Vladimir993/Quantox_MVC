@@ -11,6 +11,10 @@ class Result extends Controller
 	private $languages;
 	private $frameworks;
 	private $sub_frameworks;
+	private $db_users;
+	private $number_user_lang;
+	private $number_user_fw;
+	private $number_user_sub_fw;
 
 	public function __construct()
 	{
@@ -18,6 +22,7 @@ class Result extends Controller
 		$this->languages = UserType::getAllLanguages();
 		$this->frameworks = UserType::getAllFrameworks();
 		$this->sub_frameworks = UserType::getAllSubFrameworks();
+
 	}
 
 	public function index()
@@ -28,7 +33,8 @@ class Result extends Controller
 				["user_types"=>$this->user_types,
 				"languages"=>$this->languages,
 				"frameworks"=>$this->frameworks,
-				"sub_frameworks"=>$this->sub_frameworks
+				"sub_frameworks"=>$this->sub_frameworks,
+				"db_users"=>UserType::findUser($_GET['searchField'],$_GET['userType'])
 			]);
 
 		}else{

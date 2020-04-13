@@ -8,6 +8,6 @@
 						echo "<option>". $key["name"] ."</option>";
 					}?>
 		</select>
-		<input type="submit" name="Search" value="Search">
+		<input type="submit" name="search" value="Search">
 	</form>			
 </div>

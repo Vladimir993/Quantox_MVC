@@ -71,5 +71,29 @@ class User
 		
 	}
 
+	public static function findUser($result,$userType)
+	{
+		$conn = ConnectionDb::getInstance()->getConnection();
+		$users = null;
+		$trimmedResult = trim($result);
+
+		$trimmedUserType = trim($userType);
+
+		if ($trimmedResult != null) {
+			$query = $conn->query("SELECT users.name as username,users.email FROM users JOIN users_users_types ON users_users_types.user = users.id JOIN users_types ON users_types.id = users_users_types.user_type WHERE users.name LIKE '$trimmedResult%'  AND users_types.name = '$trimmedUserType' OR users.email LIKE '$trimmedResult%'  AND users_types.name = '$trimmedUserType'");
+			if (true) {
+			$res = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+			foreach ($res as $key => $value) {
+
+				$users[$key] = $value;
+			}
+			return $users;
+			}
+		}
+		
+	
+	}
+
 
 }
