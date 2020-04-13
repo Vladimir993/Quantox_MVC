@@ -2,9 +2,11 @@
 
 namespace App\Core;
 
-class Controller
+abstract class Controller
 {
-	
+	protected $view = null;
+	protected $data = null;
+	protected $model = null;
 	/**
 	 * Takes the appropriate one view
 	 *
@@ -12,41 +14,32 @@ class Controller
 	 * @param boolean $template	 
 	 *
 	 * @return void.
-	**/ 
-	protected function render($view, $data = [], $template = true)
+	**/
+
+	protected function render($view, $data = [])
 	{
-		if ($template) {
 
-			require '../app/views/templates/header.php';
 
-			require '../app/views/templates/footer.php';
-		}
+			require '../app/views/'.$view.'/template/header.php';
 
-		require '../app/views/'. $view .'.php';
+			require '../app/views/'. $view .DIRECTORY_SEPARATOR. $view .'.php';
+
+			require '../app/views/'.$view.'/template/footer.php';
+
 
 		$this->view = $view;
 		$this->data = $data;
 	}
 
-	protected function loadModel($model)
-	{
-		
-		$model = "App\Models\\$model";
-
-		$this->model = new $model();
-	}
-
 	/**
 	 * Redirect user location.
 	 *
-	 * @param object $class
-	 * @param string $method
+	 * @param object $page
 	 * @return void
 	**/
-	function redirect($class,$method)
+	public function redirect($page)
 	{
-		header("location:http://localhost/Quantox_MVC/public/" . 
-		(new \ReflectionClass($class))->getShortName() . DIRECTORY_SEPARATOR . $method);
+		header("location:http://localhost/Quantox_MVC/public/". $page);
 	}
 
 }

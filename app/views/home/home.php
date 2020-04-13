@@ -1,8 +1,8 @@
 <div class="content">
-	<h1><?= @$data['username']; ?></h1>
 	<h2>Home Page</h2>
-	<form action="result.php" method="get">
-		<input type="search" name="search">
+	<h2>Welcome <?= @$data['username']; ?></h2>
+	<form action="http://localhost/Quantox_MVC/public/Result" method="get">
+		<input type="search" name="searchField">
 		<select name="userType">
 					<?php foreach ($data['user_types'] as $key) {
 						echo "<option>". $key["name"] ."</option>";

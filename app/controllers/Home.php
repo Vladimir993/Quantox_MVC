@@ -4,48 +4,38 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Session;
+use App\Models\UserType;
 
 class Home extends Controller
 {
+
 	public function index()
-	{
-		Session::init();
+	{	
+		// If the user hasn't logged in
+		if (!isset($_SESSION['user'])) {
 
-		$this->loadModel("User");
+			$this->render("home");
 
-		if (isset($_SESSION['user'])) {
-			$this->redirect(new Home,"loggedIn");
+			return;
 		}
-		
-		$this->render("home",[
+
+		$this->model = new UserType;
+
+		$this->render("home",
+			[
+				"username" => Session::get("user"),
 				"user_types" => $this->model->getAllUsersTypes()
 			]);
-		
+
 	
 	}
 
-	public function loggedIn()
-	{
-		Session::init();
-		$this->loadModel("User");
-		if (isset($_SESSION['user'])) {
-
-			$this->render("home",[
-					"username" => @Session::get("user"),
-					"user_types" => $this->model->getAllUsersTypes()
-				]);
-
-		}else{
-			$this->redirect(new Home,"index");
-		}		
-	}
-
-
 	public function logout()
 	{
-		Session::init();
 		session_destroy();
-		$this->redirect(new Home,"index");
+		$this->redirect("Home\index");
 
 	}
+
+
 }

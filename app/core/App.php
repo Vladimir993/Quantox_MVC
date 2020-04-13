@@ -2,15 +2,17 @@
 
 namespace App\Core;
 
+use App\Controllers\Error;
+use App\Core\Session;
+
 class App
 {
-	private $url_controller = "Home";
-	private $url_action = "index";
-	private $url_params = [];
+	private $url_controller;
+	private $url_action;
+	private $url_params;
 
-	// Route user to requested page.
-	function __construct()
-	{
+	public function __construct()
+	{	
 		/*
 		 * $urlArray[0] = controller(Page)
 		 * $urlArray[1] = method(action)
@@ -18,46 +20,62 @@ class App
 		*/
 		$urlArray = $this->parseUrl();
 
-		// If page doesn't requested, then route to default page Home.
-		// If action doesn't requested, then call default action index.
-		if (empty($urlArray[0])) {
+		// var_dump(rtrim($_GET['url'],'/'));
+		// If page doesn't requested, then set default page Home.
+		// If action doesn't requested, then set default action index.
+		if (!empty($urlArray[0])){
 
-			$controller  =  "App\Controllers\\$this->url_controller";
+			$this->url_controller = "App\Controllers\\".$urlArray[0];
 
-		}elseif (file_exists("../app/controllers/" .$urlArray[0]. ".php")) {
-
-			$this->url_controller = $urlArray[0];
-
-			$controller  =  "App\Controllers\\$this->url_controller";
-
-			unset($urlArray[0]);
-
-			if (isset($urlArray[1])){
-
-				if (method_exists($controller , $urlArray[1])){
-
-					$this->url_action = $urlArray[1];
-
-				}else{
-
-					die("Error action");
-				}
-
-				unset($urlArray[1]);
-			}
 		}else{
 
-			die('Error page');
+			$this->url_controller = "App\Controllers\\".$GLOBALS['home_page'];								
 		}
 
-		$this->url_controller = $controller;
-		
-		$this->url_controller = new $this->url_controller();
+		if (!empty($urlArray[1])) {
+
+			$this->url_action = $urlArray[1];
+		}else{
+
+			$this->url_action = $GLOBALS['action'];	
+
+		}
+
+		unset($urlArray[0]);
+
+		unset($urlArray[1]);
 
 		$this->url_params = $urlArray ? array_values($urlArray) : [];
+		
 
-		call_user_func_array([$this->url_controller, $this->url_action], $this->url_params);
+	}
 
+	// Route user to requested page.
+	public function handle()
+	{
+		// Start session
+		Session::init();
+			
+		try {
+
+			if (class_exists($this->url_controller) && method_exists($this->url_controller, $this->url_action)) {
+
+				$this->url_controller = new $this->url_controller;
+
+				call_user_func_array([$this->url_controller, $this->url_action], $this->url_params);	
+
+			}else{
+
+				throw new \Exception($GLOBALS['err_notFound']);
+			}			
+		
+		} catch (\Exception $err){
+			
+			$err404 = new Error($err->getMessage());
+
+			$err404->notFound404();
+		}
+	
 	}
 
 	/**
@@ -68,6 +86,7 @@ class App
 	public function parseUrl()
 	{
 		if (isset($_GET['url'])) {
+			
 			return $url = explode('/', filter_var(rtrim($_GET['url'],'/'), FILTER_SANITIZE_URL)) ; 
 		}
 	}

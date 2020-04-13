@@ -6,15 +6,11 @@ class ConnectionDb {
 
     private static $instance;
     public $conn;
-  
-    private const HOST = 'localhost';
-    private const USER = 'root';
-    private const PASS = '';
-    private const DB   = 'quantox';
+
    
     private function __construct()
     {   
-      $this->conn =  mysqli_connect(SELF::HOST,SELF::USER,SELF::PASS,SELF::DB);
+      $this->conn =  new \PDO("mysql:host=".$GLOBALS['host'].";dbname=".$GLOBALS['db'], $GLOBALS['user'], $GLOBALS['password']);
     }
     
     public static function getInstance()

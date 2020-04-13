@@ -11,11 +11,15 @@ class User
 	{
 		$conn = ConnectionDb::getInstance()->getConnection();
 
-		$query = $conn->query("SELECT name,email,password FROM users");
+		$sql  = "SELECT name,email,password FROM users";
 
-		if (mysqli_num_rows($query) > 0) {
+		$query = $conn->prepare($sql);
 
-			$res = $query->fetch_all(MYSQLI_ASSOC);
+		$query->execute();
+
+		if (true) {
+
+			$res = $query->fetchAll(\PDO::FETCH_ASSOC);
 
 			foreach ($res as $key => $value) {
 
@@ -26,23 +30,45 @@ class User
 		}
 	}
 
-	public static function getAllUsersTypes()
+
+	//method to add a new user
+	public static function addNewUser($name,$email,$password,$userType= null,$language = null,$framework = null,$sub_fw = null)
 	{
 		$conn = ConnectionDb::getInstance()->getConnection();
 
-		$query = $conn->query("SELECT * FROM users_types");
-		
-		if (mysqli_num_rows($query) > 0) {
+		$conn->query("INSERT INTO users(name,email,password)VALUES('$name','$email','$password')");
 
-			$res = $query->fetch_all(MYSQLI_ASSOC);
+		$sql = "";
 
-			foreach ($res as $key => $value) {
+		$userId = $conn->query("SELECT users.id FROM users WHERE users.email = '$email'")->fetch()[0];
 
-				$users_types[$key] = $value;
+		$userTypeId = $conn->query("SELECT users_types.id FROM users_types WHERE users_types.name = '$userType'")->fetch()[0];
+
+		$languageId = $conn->query("SELECT languages.id FROM languages WHERE languages.name = '$language'")->fetch()[0];
+
+		$frameworkId = $conn->query("SELECT frameworks_and_libraries.id FROM frameworks_and_libraries WHERE frameworks_and_libraries.name = '$framework'")->fetch()[0];
+
+		$sub_framework = $conn->query("SELECT subtypes_framework.id FROM subtypes_framework WHERE subtypes_framework.name = '$sub_fw'")->fetch()[0];
+
+		if($userTypeId != null) {
+			$sql  .= "INSERT INTO users_users_types(user,user_type)VALUES($userId,$userTypeId); ";
+
+			if($language != null) {
+				$sql  .= "INSERT INTO users_languages(user,language)VALUES($userId,$languageId); ";
+
+				if($framework != null) {
+					$sql  .= "INSERT INTO users_frameworks(user,framework)VALUES($userId,$frameworkId); ";
+
+					if($sub_fw != null) {
+						$sql  .= "INSERT INTO users_subtypes_framework(user,subtype_framework)VALUES($userId,$sub_framework)";
+					}
+				}
 			}
-
-			return $users_types;
 		}
+		if ($sql != "") {
+			$conn->exec($sql);
+		}
+		
 	}
 
 

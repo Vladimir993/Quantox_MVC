@@ -15,13 +15,11 @@ class Session
 
 	public static function set($sessionName,$sessionValue)
 	{
-		Session::init();
 		$_SESSION[$sessionName] = $sessionValue;
 	}
 
 	public static function get($sessionName)
 	{
-		Session::init();
 		return $_SESSION[$sessionName];
 	}
 
@@ -29,4 +27,5 @@ class Session
 	{
 		session_destroy();
 	}
+
 }

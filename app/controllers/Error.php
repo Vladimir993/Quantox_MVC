@@ -5,20 +5,21 @@ namespace App\Controllers;
 use App\Core\Controller;
 
 class Error extends Controller
-{
-	public function index()
-	{
+{		
+	private $error = null;
 
+	public function __construct($error)
+	{
+		$this->error = $error;
 	}
 
-    public function fields()
-    {
+	public function printError()
+	{
+		echo $this->error;
+	}
 
-        $this->render("errors/emptyFields");
-    }
-
-    public function errorUser()
-    {
-    	$this->render("errors/errorUser");
-    }
+	public function notFound404()
+	{
+		$this->render("notFound404",["notFound" => $this->error]);
+	}
 }

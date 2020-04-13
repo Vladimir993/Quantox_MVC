@@ -5,55 +5,63 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Validation;
 use App\Core\Session;
+use App\Models\User;
 
 class Login extends Controller
 {
-
 	public function index()
-	{
+	{	
+		// The user is forbidden to go to the login page if logged in
+		if (isset($_SESSION['user'])){
+			
+			$this->redirect($GLOBALS[$home_page]);
+		}
 
+		$this->model = new User();
 		$this->render("login");
+
+		if (isset($_GET['login'])) {
+
+			if (!Validation::isEmptyFields([$_GET['email'],$_GET['password']])) {
+
+				if ($this->loginValidation()){
+
+					$loggedUser = $this->loginValidation()['name'];
+
+					Session::set("user",$loggedUser);
+
+					$this->redirect("Home\index");
+				}else{
+
+					$loginError = new Error($GLOBALS['err_login']);
+					$loginError->printError();
+				}
+			}else{
+
+				$emptyFError = new Error($GLOBALS['err_emptyFields']);
+				$emptyFError->printError();
+			}	
+			
+		}
 	}
 
 	public function loginValidation()
 	{
+		
+		if (isset($_GET['email'],$_GET['password'])) {
+			return Validation::loginCompare(
+				[
+					"email"=>$_GET['email'],
+					"password"=>$_GET['password']
+				],
 
-		if (isset($_GET['password'],$_GET['email'])) {
-
-			$this->render("login");
-
-			$this->loadModel("User");
-
-			$userInput = ['email' => $_GET['email'], 'password' => $_GET['password']];
-
-			if (Validation::isEmptyFields($userInput)) {
-
-				return $this->redirect(Error,"fields");
-			}
-
-			$dbUser =  Validation::loginCompare([
-
-						"email"=>$userInput['email'],
-						"password"=>$userInput['password']
-						],
-					$this->model->getAllUsers()
-				);
-
-			if (empty($dbUser)) {
-
-				return $this->redirect(Error,"errorUser");
-	
-			}
-
-			Session::set("user",$dbUser['name']);
-			$this->redirect(new Home,"loggedIn");
-				
+				$this->model->getAllUsers()
+			);
+		}else{
+			$this->redirect("Home\index");
+			
 		}
-
-		else{
-			$this->redirect(new Login,"index");			
-		}
-
-
+		
 	}
+
 }
